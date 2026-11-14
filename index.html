@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FitCore Gym membership management: members, renewals, trainers, payments and plans.">
+  <title>FitCore Gym | Membership Management</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%8B%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ Sidebar ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">FC</div>
+      <div>
+        <div class="brand-name">FitCore</div>
+        <div class="brand-sub">Gym Management</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Menu</div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>Dashboard</button>
+      <button class="nav-item" data-page="members"><span class="nav-icon">👥</span>Members</button>
+      <button class="nav-item" data-page="trainers"><span class="nav-icon">🏋️</span>Trainers</button>
+      <button class="nav-item" data-page="payments"><span class="nav-icon">💳</span>Payments</button>
+      <button class="nav-item" data-page="plans"><span class="nav-icon">🏷️</span>Plans</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="mode" id="mode-badge">Connecting…</div>
+      <button class="link-btn hidden" id="btn-reset">Reset demo data</button>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ============ Main ============ -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn" id="menu-btn" aria-label="Open menu">☰</button>
+      <div class="titles">
+        <h1 id="page-title">Dashboard</h1>
+        <p class="muted" id="page-sub"></p>
+      </div>
+      <span class="today" id="today"></span>
+    </header>
+
+    <main class="content">
+
+      <!-- Dashboard -->
+      <section class="page active" id="page-dashboard">
+        <div class="card hero">
+          <div>
+            <h2 id="greeting">Welcome back</h2>
+            <p>Here is what is happening at FitCore today.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn ghost" data-open="add-trainer">+ Add trainer</button>
+            <button class="btn primary" data-open="add-member">+ New member</button>
+          </div>
+        </div>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h2>Expiring within 7 days</h2>
+              <button class="link" data-goto="members">View all</button>
+            </div>
+            <div id="expiring"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Plan mix</h2></div>
+            <div id="plan-mix"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h2>Recent payments</h2>
+              <button class="link" data-goto="payments">View all</button>
+            </div>
+            <div id="recent-pay"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Operations</h2></div>
+            <div id="ops"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Members -->
+      <section class="page" id="page-members">
+        <div class="card">
+          <div class="toolbar">
+            <label class="search">
+              <span>🔍</span>
+              <input type="search" id="member-search" placeholder="Search by name or phone" autocomplete="off">
+            </label>
+            <div class="segmented" id="member-filter">
+              <button class="seg active" data-filter="all">All</button>
+              <button class="seg" data-filter="active">Active</button>
+              <button class="seg" data-filter="expiring">Expiring</button>
+              <button class="seg" data-filter="expired">Expired</button>
+            </div>
+            <button class="btn primary" data-open="add-member">+ Add member</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Member</th><th>Phone</th><th>Plan</th><th>Expires</th>
+                  <th>Status</th><th class="num">Visits</th><th class="actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="members-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trainers -->
+      <section class="page" id="page-trainers">
+        <div class="toolbar">
+          <div class="grow">
+            <h2 style="margin:0">Trainers</h2>
+            <p class="muted small" id="trainer-count" style="margin:4px 0 0"></p>
+          </div>
+          <button class="btn primary" data-open="add-trainer">+ Add trainer</button>
+        </div>
+        <div class="trainer-grid" id="trainer-grid"></div>
+      </section>
+
+      <!-- Payments -->
+      <section class="page" id="page-payments">
+        <div class="kpis single">
+          <div class="card kpi">
+            <div class="kpi-icon green">💰</div>
+            <div>
+              <div class="kpi-label">Total collected</div>
+              <div class="kpi-value" id="pay-total">₹0</div>
+              <div class="kpi-foot" id="pay-count"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <div class="toolbar">
+            <label class="search">
+              <span>🔍</span>
+              <input type="search" id="payment-search" placeholder="Filter by member name" autocomplete="off">
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>Date</th><th>Member</th><th class="num">Amount</th><th>Note</th></tr>
+              </thead>
+              <tbody id="payments-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Plans -->
+      <section class="page" id="page-plans">
+        <div class="plans" id="plans"></div>
+        <p class="muted small note">Fees are charged per month. Joining fees and renewals are recorded as payments automatically.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Form dialog: add member, add trainer, renew, change plan -->
+<dialog id="modal">
+  <form id="modal-form" class="modal">
+    <h3 id="modal-title"></h3>
+    <p class="sub" id="modal-sub"></p>
+    <div id="modal-fields" class="form-grid"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost" id="modal-cancel">Cancel</button>
+      <button type="submit" class="btn primary" id="modal-submit">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Confirm dialog -->
+<dialog id="confirm">
+  <div class="confirm-body">
+    <h3 id="confirm-title"></h3>
+    <p id="confirm-msg"></p>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost" id="confirm-cancel">Cancel</button>
+      <button type="button" class="btn primary" id="confirm-ok">OK</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
